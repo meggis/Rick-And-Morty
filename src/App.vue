@@ -2,20 +2,23 @@
   <Header />
   <hr />
   <div class="layout">
+    <Home />
     <Footer />
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from '@vue/runtime-core'
-import Footer from './views/shared/footer.vue'
-import Header from './views/shared/header.vue'
+import Footer from './views/shared/Footer.vue'
+import Header from './views/shared/Header.vue'
+import Home from './views/home/Home.vue'
 
 export default defineComponent({
   name: 'HomePage',
   components: {
     Footer,
     Header,
+    Home,
   },
 })
 </script>

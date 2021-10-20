@@ -2,9 +2,9 @@
   <div class="container">
     <div class="row justify-content-start">
       <div class="col-4">
-        <img src="@/assets/images/logo.png" alt="Rick and Morty logo" />
+        <img class="my-4" src="@/assets/images/logo.png" alt="Rick and Morty logo" />
       </div>
-      <div class="col-5 align-self-center">
+      <div class="col-xs-12 col-sm-10 col-md-8 col-lg-5 align-self-center">
         <div class="input-group mb-3">
           <div class="input-group-prepend">
             <label class="input-group-text search-label-padding">Search by</label>
@@ -34,11 +34,8 @@
   background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
 }
 .search-label-padding {
-  padding-left: 20px !important;
-  padding-right: 20px !important;
-}
-.container {
-  margin: 3vh auto;
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
 }
 .input-group-text {
   background-color: white !important;
