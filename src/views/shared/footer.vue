@@ -1,9 +1,7 @@
 <template>
   <div class="footer-class">
-    <b-col>
-      Created for recruitment task by
-      <a class="footer-a" href="https://github.com/meggis"> Magdalena Siekańska </a>
-    </b-col>
+    Created for recruitment task by
+    <a class="footer-a" href="https://github.com/meggis"> Magdalena Siekańska </a>
   </div>
 </template>
 <style lang="scss">
