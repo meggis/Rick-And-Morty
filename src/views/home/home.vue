@@ -55,11 +55,17 @@ export default defineComponent({
   props: {
     characters: Object,
   },
+  // data() {
+  //   return {
+  //     favourites: {},
+  //   }
+  // },
   methods: {
     addToFavourites(id: number) {
-      console.log(id)
+      // console.log(id)
+      this.$emit('setFavourite', id)
     },
-    showFavoritesCharacters() {},
+    // showFavoritesCharacters() {},
   },
 })
 </script>

@@ -7,7 +7,7 @@
     @decrement="decrement"
     @setPageNum="setPageNum"
   />
-  <Home :characters="characters" :favorites="favorites" />
+  <Home :characters="characters" @setFavourite="setFavourite" :favourites="favourites" />
   <div class="layout">
     <Footer />
   </div>
@@ -32,7 +32,7 @@ export default defineComponent({
   data() {
     return {
       characters: [],
-      favorites: [],
+      // favourites: {},
       currentPage: 1,
       numberOfPages: null,
     }
@@ -46,17 +46,28 @@ export default defineComponent({
         .get(`https://rickandmortyapi.com/api/character?page=${this.currentPage}`)
         .then((response) => {
           this.characters = response.data.results
+          // this.numberOfPages = response.data.info.pages
+        })
+        .catch((error) => console.log(error))
+    },
+    setFilteredTypeAndValue({ type, value }: string) {
+      // console.log(type, value)
+      axios
+        .get(`https://rickandmortyapi.com/api/character/?${type}=${value}`)
+        .then((response) => {
+          this.favourites = response.data.results
           this.numberOfPages = response.data.info.pages
         })
         .catch((error) => console.log(error))
     },
-    setFilteredTypeAndValue({ type, value }) {
-      console.log(type, value)
+    setFavourite(id: number) {
       axios
-        .get(`https://rickandmortyapi.com/api/character/?${type}=${value}`)
+        .get(`https://rickandmortyapi.com/api/character/${id}`)
         .then((response) => {
-          this.characters = response.data.results
-          this.numberOfPages = response.data.info.pages
+          // console.log(response.data)
+          // this.favourites = response.data
+          // this.numberOfPages = response.data.info.pages
+          console.log(response.data)
         })
         .catch((error) => console.log(error))
     },
