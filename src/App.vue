@@ -1,14 +1,13 @@
 <template>
-  <Header />
+  <Header @setFilteredTypeAndValue="setFilteredTypeAndValue" />
   <hr />
   <Pagination
     :numberOfPages="numberOfPages"
     @increment="increment"
     @decrement="decrement"
-    @PaginationOnClick="onLoadPage"
     @setPageNum="setPageNum"
   />
-  <Home :characters="characters" />
+  <Home :characters="characters" :favorites="favorites" />
   <div class="layout">
     <Footer />
   </div>
@@ -33,42 +32,43 @@ export default defineComponent({
   data() {
     return {
       characters: [],
+      favorites: [],
       currentPage: 1,
       numberOfPages: null,
     }
   },
   created() {
-    axios
-      .get(`https://rickandmortyapi.com/api/character?page=${this.currentPage}`)
-      .then((response) => {
-        console.log(response.data.info)
-        this.characters = response.data.results
-        this.numberOfPages = response.data.info.pages
-      })
-      .catch((error) => console.log(error))
+    this.fetchItems()
   },
   methods: {
-    async increment() {
+    fetchItems() {
+      axios
+        .get(`https://rickandmortyapi.com/api/character?page=${this.currentPage}`)
+        .then((response) => {
+          this.characters = response.data.results
+          this.numberOfPages = response.data.info.pages
+        })
+        .catch((error) => console.log(error))
+    },
+    setFilteredTypeAndValue({ type, value }) {
+      console.log(type, value)
+      axios
+        .get(`https://rickandmortyapi.com/api/character/?${type}=${value}`)
+        .then((response) => {
+          this.characters = response.data.results
+          this.numberOfPages = response.data.info.pages
+        })
+        .catch((error) => console.log(error))
+    },
+    increment() {
       this.currentPage++
-      axios
-        .get(`https://rickandmortyapi.com/api/character?page=${this.currentPage}`)
-        .then((response) => {
-          this.characters = response.data.results
-          this.numberOfPages = response.data.info.pages
-        })
-        .catch((error) => console.log(error))
+      this.fetchItems()
     },
-    async decrement() {
+    decrement() {
       this.currentPage--
-      axios
-        .get(`https://rickandmortyapi.com/api/character?page=${this.currentPage}`)
-        .then((response) => {
-          this.characters = response.data.results
-          this.numberOfPages = response.data.info.pages
-        })
-        .catch((error) => console.log(error))
+      this.fetchItems()
     },
-    setPageNum(num: number): void {
+    async setPageNum(num: number): void {
       this.currentPage = num
       axios
         .get(`https://rickandmortyapi.com/api/character?page=${this.currentPage}`)
@@ -78,44 +78,12 @@ export default defineComponent({
         })
         .catch((error) => console.log(error))
     },
-    // isSomeSet(): boolean {
-    //   return !!this.currentPage
-    // },
-    // onCurrentPageClick(currentPage) {
-    //   console.log(currentPage)
-    // },
-    // async pageChangeHandle(value) {
-    //   switch (value) {
-    //     case 'next':
-    //       this.currentPage += 1
-    //       break
-    //     case 'previous':
-    //       this.currentPage -= 1
-    //       break
-    //     default:
-    //       this.currentPage = value
-    //   }
-    //   const { data } = await axios.get(
-    //     `?country=us&page=${this.currentPage}&pageSize=${
-    //       this.$options.static.visibleItemsPerPageCount
-    //     }&category=business&apiKey=065703927c66462286554ada16a686a1`
-    //   )
-    // },
   },
-  // async mounted() {
-  //   const { data } = await axios.get(
-  //       `https://rickandmortyapi.com/api/character?page=${this.currentPage}`
-  //     ).then(
-  //       this.characters = data.response.data.results
-  //       this.numberOfPages = data.response.data.info.pages
-  //     )
-  // },
 })
 </script>
 
 <style lang="scss">
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
-
 .layout {
   display: flex;
   flex-direction: column;

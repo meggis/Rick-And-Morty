@@ -9,22 +9,44 @@
           <div class="input-group-prepend">
             <label class="input-group-text search-label-padding">Search by</label>
           </div>
-          <select class="custom-select search-label-padding">
-            <option selected>Name</option>
-            <option value="1">Name</option>
-            <option value="2">Identifier</option>
-            <option value="3">Episode</option>
+          <select class="custom-select search-label-padding" v-model="selected">
+            <option value="name">Name</option>
+            <option value="id">Identifier</option>
+            <option value="episode">Episode</option>
           </select>
           <input
             type="text"
             class="form-control my-icon"
             aria-label="Text input with dropdown button"
+            @keyup="submitFiltering"
           />
         </div>
+        {{ type }}
       </div>
     </div>
   </div>
 </template>
+
+<script lang="ts">
+import { defineComponent } from '@vue/runtime-core'
+
+export default defineComponent({
+  name: 'Header',
+  data() {
+    return {
+      selected: 'name',
+    }
+  },
+  methods: {
+    submitFiltering({ target }) {
+      // if (target.value.length < 3) {
+      //   return
+      // }
+      this.$emit('setFilteredTypeAndValue', { type: this.selected, value: target.value })
+    },
+  },
+})
+</script>
 
 <style lang="scss">
 .my-icon {

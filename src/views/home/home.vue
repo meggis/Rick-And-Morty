@@ -4,7 +4,7 @@
       <div class="col">
         <div class="btn-group" role="group">
           <button type="button" class="btn">All characters</button>
-          <button type="button" class="btn">Favorites</button>
+          <button type="button" class="btn" @click="$event()">Favorites</button>
         </div>
         <div id="table">
           <!-- {{ character }} -->
@@ -20,7 +20,7 @@
                 <th scope="col">Add To Favorites</th>
               </tr>
             </thead>
-            <tbody v-for="character in characters" :key="character.id">
+            <tbody v-for="(character, index) in characters" :key="index">
               <tr>
                 <td class="align-middle">
                   <img class="character-img" :src="character.image" />
@@ -29,8 +29,8 @@
                 <td class="align-middle">{{ character.name }}</td>
                 <td class="align-middle">{{ character.gender }}</td>
                 <td class="align-middle">{{ character.species }}</td>
-                <td class="align-middle">{{ character.episode.length }}</td>
-                <td class="align-middle">
+                <td class="align-middle">{{ 'Season ' + character.episode.length }}</td>
+                <td class="align-middle" @click="addToFavourites(character.id)">
                   <button type="button" class="btn star-border">
                     <span class="material-icons md-14">star</span>
                   </button>
@@ -54,6 +54,12 @@ export default defineComponent({
   name: 'Home',
   props: {
     characters: Object,
+  },
+  methods: {
+    addToFavourites(id: number) {
+      console.log(id)
+    },
+    showFavoritesCharacters() {},
   },
 })
 </script>
