@@ -944,6 +944,13 @@
     "@nodelib/fs.scandir" "2.1.5"
     "fastq" "^1.6.0"
 
+"@ocrv/vue-tailwind-pagination@^0.0.4":
+  "integrity" "sha512-HVAqa18gh6Nk4o3scqB8zZbXUhoJgFjIGm49N1Wc4q8XMo09jBSqo4OsNAFrYIDK5cK/Et8fH1NgLgzjVCDljQ=="
+  "resolved" "https://registry.npmjs.org/@ocrv/vue-tailwind-pagination/-/vue-tailwind-pagination-0.0.4.tgz"
+  "version" "0.0.4"
+  dependencies:
+    "vue" "^3.0.5"
+
 "@popperjs/core@^2.10.2":
   "integrity" "sha512-IXf3XA7+XyN7CP9gGh/XB0UxVMlvARGEgGXLubFICsUMGz6Q+DU+i4gGlpOxTjKvXjkJDJC8YdqdKkDj9qZHEQ=="
   "resolved" "https://registry.npmjs.org/@popperjs/core/-/core-2.10.2.tgz"
@@ -5500,7 +5507,7 @@
     "hash-sum" "^1.0.2"
     "loader-utils" "^1.0.2"
 
-"vue@^3.0.0", "vue@^3.0.0 || ^2.0.0", "vue@^3.0.2", "vue@^3.2.20", "vue@3.2.20":
+"vue@^3.0.0", "vue@^3.0.0 || ^2.0.0", "vue@^3.0.2", "vue@^3.0.5", "vue@^3.2.20", "vue@3.2.20":
   "integrity" "sha512-81JjEP4OGk9oO8+CU0h2nFPGgJBm9mNa3kdCX2k6FuRdrWrC+CNe+tOnuIeTg8EWwQuI+wwdra5Q7vSzp7p4Iw=="
   "resolved" "https://registry.npmjs.org/vue/-/vue-3.2.20.tgz"
   "version" "3.2.20"

@@ -7,7 +7,7 @@ html, body {
 body {
   display: flex;
   flex-direction: column;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Poppins', sans-serif !important;
   font-size: 1rem;
   color: #a9b1bd;
 }
