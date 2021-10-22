@@ -1,9 +1,9 @@
 <template>
   <div>
     <button @click="$emit('decrement')">&lt;</button>
-    <!-- <button v-for="numberOfPage in showNumberOfDecrementedPages()" :key="`some-${numberOfPage}`">
+    <button v-for="numberOfPage in showNumberOfDecrementedPages()" :key="`some-${numberOfPage}`">
       {{ numberOfPage }}
-    </button> -->
+    </button>
     <!-- <button
       v-for="numberOfPage in pagesToDisplay()"
       :key="numberOfPage.id"
@@ -38,20 +38,13 @@ export default defineComponent({
       this.$emit('setPageNum', numberOfPage)
     },
     showNumberOfDecrementedPages() {
+      console.log('this.currentPage', this.currentPage)
       const num = 0
-      // let myNumbers = this.numberOfPages
       let myNumber = this.currentPage
       if (myNumber <= num) {
         console.log('-')
         return
       }
-      // {
-      //   for (let i = num; i < myNumbers; i++) {
-      //     if (myNumber <= myNumbers && myNumber > 0) {
-      //       console.log('kkdkdkdk')
-      //     }
-      //   }
-      // }
     },
   },
 })

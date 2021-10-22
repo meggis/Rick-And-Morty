@@ -1,13 +1,21 @@
 <template>
   <Header @setFilteredTypeAndValue="setFilteredTypeAndValue" />
   <hr />
+  {{ favourites }}
   <Pagination
     :numberOfPages="numberOfPages"
     @increment="increment"
     @decrement="decrement"
     @setPageNum="setPageNum"
   />
-  <Home :characters="characters" @setFavourite="setFavourite" :favourites="favourites" />
+  <Home
+    :currentPage="currentPage"
+    :characters="characters"
+    @setFavourite="setFavourite"
+    :favourites="favourites"
+    @getFavourite="getFavourite"
+    @getAllCharacters="getAllCharacters"
+  />
   <div class="layout">
     <Footer />
   </div>
@@ -32,16 +40,16 @@ export default defineComponent({
   data() {
     return {
       characters: [],
-      // favourites: {},
+      favourites: [],
       currentPage: 1,
       numberOfPages: null,
     }
   },
   created() {
-    this.fetchItems()
+    this.getAllCharacters()
   },
   methods: {
-    fetchItems() {
+    getAllCharacters() {
       axios
         .get(`https://rickandmortyapi.com/api/character?page=${this.currentPage}`)
         .then((response) => {
@@ -55,19 +63,27 @@ export default defineComponent({
       axios
         .get(`https://rickandmortyapi.com/api/character/?${type}=${value}`)
         .then((response) => {
-          this.favourites = response.data.results
+          this.characters = response.data.results
           this.numberOfPages = response.data.info.pages
         })
         .catch((error) => console.log(error))
     },
     setFavourite(id: number) {
+      if (!this.favourites.includes(id)) {
+        this.favourites.push(id)
+        return
+      }
+      const foundId = this.favourites.indexOf(id)
+      this.favourites.splice(foundId, 1)
+    },
+    getFavourite() {
+      let mergedFavourites = this.favourites.join(',')
       axios
-        .get(`https://rickandmortyapi.com/api/character/${id}`)
+        .get(`https://rickandmortyapi.com/api/character/${mergedFavourites}`)
         .then((response) => {
-          // console.log(response.data)
-          // this.favourites = response.data
-          // this.numberOfPages = response.data.info.pages
+          this.characters = response.data
           console.log(response.data)
+          // this.numberOfPages = response.data.info.pages
         })
         .catch((error) => console.log(error))
     },

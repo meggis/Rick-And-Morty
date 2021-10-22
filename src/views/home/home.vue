@@ -3,11 +3,16 @@
     <div class="row justify-content-md-center">
       <div class="col">
         <div class="btn-group" role="group">
-          <button type="button" class="btn">All characters</button>
-          <button type="button" class="btn" @click="$event()">Favorites</button>
+          <button type="button" class="btn" @click="$emit('getAllCharacters')">
+            All characters
+          </button>
+          <button type="button" class="btn" @click="$emit('getFavourite')">Favorites</button>
         </div>
-        <div id="table">
-          <!-- {{ character }} -->
+        {{ favourites }}
+        <div v-if="!favourites">
+          <h1>There is nothing</h1>
+        </div>
+        <div id="table" class="mt-3">
           <table class="table table-hover">
             <thead>
               <tr>
@@ -25,13 +30,24 @@
                 <td class="align-middle">
                   <img class="character-img" :src="character.image" />
                 </td>
-                <td class="align-middle">{{ character.id }}</td>
+                <td class="align-middle">{{ index }}</td>
                 <td class="align-middle">{{ character.name }}</td>
-                <td class="align-middle">{{ character.gender }}</td>
+                <td class="align-middle">
+                  <span class="material-icons" v-if="character.gender === 'Male'"> male </span>
+                  <span class="material-icons" v-if="character.gender === 'Female'"> female </span>
+                  <span class="material-icons" v-if="character.gender === 'Unknown'">
+                    horizontal_rule
+                  </span>
+                  {{ character.gender }}
+                </td>
                 <td class="align-middle">{{ character.species }}</td>
                 <td class="align-middle">{{ 'Season ' + character.episode.length }}</td>
-                <td class="align-middle" @click="addToFavourites(character.id)">
-                  <button type="button" class="btn star-border">
+                <td class="align-middle" @click="$emit('setFavourite', character.id)">
+                  <button
+                    type="button"
+                    class="btn star-border"
+                    :class="{ active: isFav(character.id) }"
+                  >
                     <span class="material-icons md-14">star</span>
                   </button>
                 </td>
@@ -49,24 +65,33 @@
 
 <script lang="ts">
 import { defineComponent } from '@vue/runtime-core'
+import { isProxy, toRaw } from 'vue'
 
 export default defineComponent({
-  name: 'Home',
   props: {
-    characters: Object,
-  },
-  // data() {
-  //   return {
-  //     favourites: {},
-  //   }
-  // },
-  methods: {
-    addToFavourites(id: number) {
-      // console.log(id)
-      this.$emit('setFavourite', id)
+    characters: {
+      type: Object,
     },
-    // showFavoritesCharacters() {},
+    favourites: {
+      type: Array,
+      required: true,
+    },
+    currentPage: {
+      type: Number,
+    },
   },
+  methods: {
+    isFav(id: number) {
+      let rawFavourites = null
+      if (isProxy(this.favourites)) {
+        rawFavourites = toRaw(this.favourites)
+      }
+      return rawFavourites?.includes(id)
+    },
+  },
+  // mounted() {
+
+  // }
 })
 </script>
 
@@ -84,6 +109,9 @@ export default defineComponent({
   background-color: white;
   &:hover {
     background-color: #e5eaf4;
+  }
+  &.active {
+    background-color: rgb(133, 12, 12);
   }
 }
 .material-icons {
