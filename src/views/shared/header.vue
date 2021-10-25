@@ -36,25 +36,17 @@ export default defineComponent({
   data() {
     return {
       selected: 'name',
-      // type: this.selected,
-      // value: $event.target.value,
     }
   },
   computed: mapState(['characters']),
   methods: {
-    submitFiltering({ target }) {
+    submitFiltering({ target }): void {
       if (this.selected === 'episode') {
         return this.$store.dispatch('filterByEpisode', target.value)
       }
 
       this.$store.dispatch('setFilteredTypeAndValue', { type: this.selected, value: target.value })
     },
-    // submitFiltering({ target }) {
-    //   // if (target.value.length < 3) {
-    //   //   return
-    //   // }
-    //   this.$emit('setFilteredTypeAndValue', { type: this.selected, value: target.value })
-    // },
   },
 })
 </script>
@@ -83,10 +75,5 @@ export default defineComponent({
 select {
   color: $greyColour !important;
   border-color: $greyColour !important;
-}
-.option-style:nth-child(2) {
-  background-color: black;
-  // border-bottom-right-radius: 5px !important;
-  // border-bottom-left-radius: 5px !important;
 }
 </style>

@@ -36,6 +36,9 @@ export default defineComponent({
       return 5
     },
     setNumberOfCurrentPage(numberOfPag: number): void {
+      if (numberOfPag === 34) {
+        return
+      }
       this.$store.commit('setCurrentPage', numberOfPag)
       this.$store.dispatch('getAllCharacters')
     },
@@ -55,7 +58,6 @@ export default defineComponent({
       return this.currentPage - 1
     },
     pagesToAdd(): number[] | number {
-      // this.maxPages
       let limit = 3
       const numLeft = this.numberOfPages - this.currentPage
 
