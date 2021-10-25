@@ -1,18 +1,15 @@
 <template>
   <div class="container">
-    <div class="row justify-content-md-center">
+    <div class="row">
       <div class="col">
-        <div class="btn-group" role="group">
-          <button type="button" class="btn" @click="$emit('getAllCharacters')">
-            All characters
-          </button>
-          <button type="button" class="btn" @click="$emit('getFavourite')">Favorites</button>
+        <div class="btn-group align-middle" role="group">
+          <button type="button" class="btn" @click="getAllCharacters">All characters</button>
+          <button type="button" class="btn" @click="getFavourite">Favorites</button>
         </div>
-        {{ favourites }}
         <div v-if="!favourites">
           <h1>There is nothing</h1>
         </div>
-        <div id="table" class="mt-3">
+        <div v-if="characters || favourites" id="table" class="mt-3">
           <table class="table table-hover">
             <thead>
               <tr>
@@ -30,23 +27,24 @@
                 <td class="align-middle">
                   <img class="character-img" :src="character.image" />
                 </td>
-                <td class="align-middle">{{ index }}</td>
+                <td class="align-middle">{{ character.id }}</td>
                 <td class="align-middle">{{ character.name }}</td>
                 <td class="align-middle">
                   <span class="material-icons" v-if="character.gender === 'Male'"> male </span>
                   <span class="material-icons" v-if="character.gender === 'Female'"> female </span>
-                  <span class="material-icons" v-if="character.gender === 'Unknown'">
+                  <span class="material-icons" v-if="character.gender === 'unknown'">
                     horizontal_rule
                   </span>
                   {{ character.gender }}
                 </td>
                 <td class="align-middle">{{ character.species }}</td>
-                <td class="align-middle">{{ 'Season ' + character.episode.length }}</td>
-                <td class="align-middle" @click="$emit('setFavourite', character.id)">
+                <td class="align-middle">{{ getLastEpisode(character.episode) }}</td>
+                <td class="align-middle">
                   <button
                     type="button"
                     class="btn star-border"
                     :class="{ active: isFav(character.id) }"
+                    @click="setFavourite(character.id)"
                   >
                     <span class="material-icons md-14">star</span>
                   </button>
@@ -66,20 +64,16 @@
 <script lang="ts">
 import { defineComponent } from '@vue/runtime-core'
 import { isProxy, toRaw } from 'vue'
+import { mapState } from 'vuex'
+// import axios from 'axios'
 
 export default defineComponent({
-  props: {
-    characters: {
-      type: Object,
-    },
-    favourites: {
-      type: Array,
-      required: true,
-    },
-    currentPage: {
-      type: Number,
-    },
-  },
+  // data() {
+  //   return {
+  //     favourites: [],
+  //   }
+  // },
+  computed: mapState(['characters', 'favourites']),
   methods: {
     isFav(id: number) {
       let rawFavourites = null
@@ -88,39 +82,71 @@ export default defineComponent({
       }
       return rawFavourites?.includes(id)
     },
-  },
-  // mounted() {
+    setFavourite(id: number) {
+      this.$store.commit('setFavourite', id)
+    },
+    getFavourite() {
+      this.$store.dispatch('getFavourite')
+    },
+    getAllCharacters() {
+      this.$store.dispatch('getAllCharacters')
+    },
+    getLastEpisode(episode) {
+      const episodeCodeumber = episode[episode.length - 1].match(/\d+$/)[0]
+      if (episodeCodeumber < 10) {
+        return `S01E0${episodeCodeumber}`
+      }
 
-  // }
+      const firstDigit = episodeCodeumber.toString()[0]
+      const secondDigit = episodeCodeumber.toString()[1]
+      return `S0${firstDigit}E0${secondDigit}`
+    },
+    // getFavourite() {
+    //   let mergedFavourites = this.favourites.join(',')
+    //   // console.log(mergedFavourites)
+    //   axios
+    //     .get(`https://rickandmortyapi.com/api/character/${mergedFavourites}`)
+    //     .then((response) => {
+    //       this.characters = response.data
+    //       this.numberOfPages = response.data.info.pages
+    //     })
+    //     .catch((error) => console.log(error))
+    // },
+  },
 })
 </script>
 
 <style scoped lang="scss">
+@import 'src/assets/styles/globalColour.scss';
+
 .character-img {
   height: 5rem;
 }
 .table > :not(:first-child) {
   border-top: 1px;
-  border-color: #e5eaf4 !important;
+  border-color: $lighterGrey !important;
 }
 .star-border {
-  border-color: #11b0c8;
+  border-color: $mainColour;
   border-radius: 8px;
   background-color: white;
   &:hover {
-    background-color: #e5eaf4;
+    background-color: $lighterGrey;
   }
   &.active {
-    background-color: rgb(133, 12, 12);
+    background-color: $mainColour;
+    .material-icons {
+      color: white;
+    }
   }
 }
 .material-icons {
-  color: #11b0c8;
+  color: $mainColour;
   &.md-14 {
     font-size: 14px;
   }
 }
 table {
-  color: #a9b1bd;
+  color: $greyColour;
 }
 </style>

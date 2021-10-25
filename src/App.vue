@@ -1,22 +1,11 @@
 <template>
-  <Header @setFilteredTypeAndValue="setFilteredTypeAndValue" />
-  <hr />
-  {{ favourites }}
-  <Pagination
-    :numberOfPages="numberOfPages"
-    @increment="increment"
-    @decrement="decrement"
-    @setPageNum="setPageNum"
-  />
-  <Home
-    :currentPage="currentPage"
-    :characters="characters"
-    @setFavourite="setFavourite"
-    :favourites="favourites"
-    @getFavourite="getFavourite"
-    @getAllCharacters="getAllCharacters"
-  />
-  <div class="layout">
+  <div class="wrapper">
+    <Header @setFilteredTypeAndValue="setFilteredTypeAndValue" />
+    <hr />
+    <Pagination />
+    <Home :currentPage="currentPage" :characters="characters" :favourites="favourites" />
+  </div>
+  <div class="footer">
     <Footer />
   </div>
 </template>
@@ -25,9 +14,10 @@
 import { defineComponent } from '@vue/runtime-core'
 import Footer from './views/shared/Footer.vue'
 import Header from './views/shared/Header.vue'
-import Home from './views/home/home.vue'
-import Pagination from './components/Pagination.vue'
-import axios from 'axios'
+import Home from './views/components/Home.vue'
+import Pagination from './views/components/Pagination.vue'
+// import axios from 'axios'
+import { mapState } from 'vuex'
 
 export default defineComponent({
   name: 'HomePage',
@@ -37,73 +27,25 @@ export default defineComponent({
     Header,
     Home,
   },
-  data() {
-    return {
-      characters: [],
-      favourites: [],
-      currentPage: 1,
-      numberOfPages: null,
-    }
-  },
+  computed: mapState(['currentPage', 'characters', 'setNumberOfPages']),
   created() {
     this.getAllCharacters()
   },
   methods: {
     getAllCharacters() {
-      axios
-        .get(`https://rickandmortyapi.com/api/character?page=${this.currentPage}`)
-        .then((response) => {
-          this.characters = response.data.results
-          // this.numberOfPages = response.data.info.pages
-        })
-        .catch((error) => console.log(error))
-    },
-    setFilteredTypeAndValue({ type, value }: string) {
-      // console.log(type, value)
-      axios
-        .get(`https://rickandmortyapi.com/api/character/?${type}=${value}`)
-        .then((response) => {
-          this.characters = response.data.results
-          this.numberOfPages = response.data.info.pages
-        })
-        .catch((error) => console.log(error))
-    },
-    setFavourite(id: number) {
-      if (!this.favourites.includes(id)) {
-        this.favourites.push(id)
-        return
-      }
-      const foundId = this.favourites.indexOf(id)
-      this.favourites.splice(foundId, 1)
-    },
-    getFavourite() {
-      let mergedFavourites = this.favourites.join(',')
-      axios
-        .get(`https://rickandmortyapi.com/api/character/${mergedFavourites}`)
-        .then((response) => {
-          this.characters = response.data
-          console.log(response.data)
-          // this.numberOfPages = response.data.info.pages
-        })
-        .catch((error) => console.log(error))
+      this.$store.dispatch('getAllCharacters')
     },
     increment() {
-      this.currentPage++
-      this.fetchItems()
+      this.$store.commit('incrementPage')
+      this.$store.dispatch('getAllCharacters')
     },
     decrement() {
-      this.currentPage--
-      this.fetchItems()
+      this.$store.commit('decrementPage')
+      this.$store.dispatch('getAllCharacters')
     },
-    async setPageNum(num: number): void {
-      this.currentPage = num
-      axios
-        .get(`https://rickandmortyapi.com/api/character?page=${this.currentPage}`)
-        .then((response) => {
-          this.characters = response.data.results
-          this.numberOfPages = response.data.info.pages
-        })
-        .catch((error) => console.log(error))
+    setPageNum(num: number): void {
+      this.$store.commit('setCurrentPage', num)
+      this.$store.dispatch('getAllCharacters')
     },
   },
 })
@@ -111,10 +53,14 @@ export default defineComponent({
 
 <style lang="scss">
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
-.layout {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
+.wrapper {
+  min-height: 100%;
+  margin-bottom: -50px;
+  // overflow: auto;
+}
+.footer {
+  height: 50px;
+  margin-top: 50px;
+  text-align: center;
 }
 </style>

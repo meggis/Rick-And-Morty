@@ -10,15 +10,15 @@
             <label class="input-group-text search-label-padding">Search by</label>
           </div>
           <select class="custom-select search-label-padding" v-model="selected">
-            <option value="name">Name</option>
-            <option value="id">Identifier</option>
-            <option value="episode">Episode</option>
+            <option class="option-style" value="name">Name</option>
+            <option class="option-style" value="id">Identifier</option>
+            <option class="option-style" value="episode">Episode</option>
           </select>
           <input
             type="text"
             class="form-control my-icon"
             aria-label="Text input with dropdown button"
-            @keyup="submitFiltering"
+            @keyup="submitFiltering($event)"
           />
         </div>
         {{ type }}
@@ -29,26 +29,38 @@
 
 <script lang="ts">
 import { defineComponent } from '@vue/runtime-core'
+import { mapState } from 'vuex'
 
 export default defineComponent({
   name: 'Header',
   data() {
     return {
       selected: 'name',
+      // type: this.selected,
+      // value: $event.target.value,
     }
   },
+  computed: mapState(['characters']),
   methods: {
     submitFiltering({ target }) {
-      // if (target.value.length < 3) {
-      //   return
-      // }
-      this.$emit('setFilteredTypeAndValue', { type: this.selected, value: target.value })
+      if (this.selected === 'episode') {
+        return this.$store.dispatch('filterByEpisode', target.value)
+      }
+
+      this.$store.dispatch('setFilteredTypeAndValue', { type: this.selected, value: target.value })
     },
+    // submitFiltering({ target }) {
+    //   // if (target.value.length < 3) {
+    //   //   return
+    //   // }
+    //   this.$emit('setFilteredTypeAndValue', { type: this.selected, value: target.value })
+    // },
   },
 })
 </script>
 
 <style lang="scss">
+@import 'src/assets/styles/globalColour.scss';
 .my-icon {
   background-image: url('@/assets/images/search-icon.png');
   background-repeat: no-repeat;
@@ -58,15 +70,23 @@ export default defineComponent({
 .search-label-padding {
   padding-left: 1rem !important;
   padding-right: 1rem !important;
+  div {
+    background-color: black;
+  }
 }
 .input-group-text {
   background-color: white !important;
-  color: #a9b1bd !important;
+  color: $greyColour !important;
   border-top-right-radius: 0 !important;
   border-bottom-right-radius: 0 !important;
 }
 select {
-  color: #a9b1bd !important;
-  border-color: #a9b1bd !important;
+  color: $greyColour !important;
+  border-color: $greyColour !important;
+}
+.option-style:nth-child(2) {
+  background-color: black;
+  // border-bottom-right-radius: 5px !important;
+  // border-bottom-left-radius: 5px !important;
 }
 </style>

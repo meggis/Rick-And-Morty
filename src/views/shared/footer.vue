@@ -5,20 +5,12 @@
   </div>
 </template>
 <style lang="scss">
-.footer-class {
-  border-top: 1px solid rgb(255, 255, 255);
-  padding: 20px 0px 20px 0px;
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  text-align: center;
-}
-
+@import 'src/assets/styles/globalColour.scss';
 .footer-a {
-  color: #11b0c8;
+  color: $mainColour;
   &:hover {
     text-decoration: none;
-    color: #0f97ac;
+    color: $mainColour;
   }
 }
 </style>
