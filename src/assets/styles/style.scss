@@ -1,0 +1,22 @@
+html, body {
+  margin: 0 auto;
+  height: 100%;
+  // max-width: 90%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  font-family: 'Poppins', sans-serif !important;
+  font-size: 1rem;
+  color: #a9b1bd;
+}
+
+a:-webkit-any-link {
+  text-decoration: none;
+}
+
+hr {
+  background-color: #d6dbe4 !important;
+  margin: 0 !important;
+}
