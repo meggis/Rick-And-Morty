@@ -49,9 +49,8 @@ const store = createStore({
           commit('setCharacters', response.data.results)
           commit('setNumberOfPages', response.data.info.pages)
         })
-        .catch((error) => {
+        .catch(() => {
           commit('reset')
-          console.log(error)
         })
     },
     async getFavourite({ commit, state }) {
@@ -62,9 +61,8 @@ const store = createStore({
           commit('setCharacters', response.data)
           commit('setNumberOfPages')
         })
-        .catch((error) => {
+        .catch(() => {
           commit('reset')
-          console.log(error)
         })
     },
     async setFilteredTypeAndValue({ commit }, { type, value }) {
@@ -74,9 +72,8 @@ const store = createStore({
           commit('setCharacters', response.data.results)
           commit('setNumberOfPages', response.data.info.pages)
         })
-        .catch((error) => {
+        .catch(() => {
           commit('reset')
-          console.log(error)
         })
     },
     async filterByEpisode({ commit }, value) {
@@ -86,9 +83,8 @@ const store = createStore({
           commit('setCharacters', response.data.results)
           commit('setNumberOfPages', response.data.info.pages)
         })
-        .catch((error) => {
+        .catch(() => {
           commit('reset')
-          console.log(error)
         })
     },
   },
